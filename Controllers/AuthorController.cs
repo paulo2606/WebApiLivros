@@ -25,5 +25,16 @@ namespace WebApiLivros.Controllers
             }
             return BadRequest(response);
         }
+
+        [HttpGet("SearchAuthorById")]
+        public async Task<ActionResult<ResponseModel<AuthorModel>>> GetAuthorById(int idAuthor)
+        {
+            var response = await _authorInterface.GetAuthorById(idAuthor);
+            if (response.Status)
+            {
+                return Ok(response);
+            }
+            return NotFound(response);
+        }
     }
 }

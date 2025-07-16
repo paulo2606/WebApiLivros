@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Identity.Client;
 using WebApiLivros.Data;
 using WebApiLivros.Model;
 
@@ -12,9 +13,33 @@ namespace WebApiLivros.Services
         {
             _context = context;
         }
-        public Task<ResponseModel<AuthorModel>> GetAuthorById(int idAuthor)
+        public async Task<ResponseModel<AuthorModel>> GetAuthorById(int idAuthor)
         {
-            throw new NotImplementedException();
+            ResponseModel<AuthorModel> response = new ResponseModel<AuthorModel>();
+
+            try
+            {
+                var authorById = await _context.Authors.FirstOrDefaultAsync(AuthorDataBase => AuthorDataBase.Id == idAuthor);
+
+                if (authorById == null)
+                {
+                    response.Message = "Id not found.";
+                    return response;
+                }
+
+                response.Data = authorById;
+                response.Status = true;
+                response.Message = "Author retrieved successfully.";
+
+                return response;
+                
+            }
+            catch (Exception ex)
+            {
+                response.Status = false;
+                response.Message = ex.Message;
+                return response;
+            }
         }
 
         public async Task<ResponseModel<List<AuthorModel>>> ListAuthor()
