@@ -6,7 +6,7 @@ namespace WebApiLivros.Services
     {
         Task<ResponseModel<List<AuthorModel>>> ListAuthor();
         Task<ResponseModel<AuthorModel>> GetAuthorById(int idAuthor);
-        Task<ResponseModel<AuthorModel>> SearchAuthorByName(string nameAuthor);
+        Task<ResponseModel<AuthorModel>> GetAuthorByName(string nameAuthor);
         
 
 

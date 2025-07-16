@@ -23,7 +23,7 @@ namespace WebApiLivros.Services
 
                 if (authorById == null)
                 {
-                    response.Message = "Id not found.";
+                    response.Message = "Author not found.";
                     return response;
                 }
 
@@ -61,9 +61,33 @@ namespace WebApiLivros.Services
             }
         }
 
-        public Task<ResponseModel<AuthorModel>> SearchAuthorByName(string nameAuthor)
+        public async Task<ResponseModel<AuthorModel>> GetAuthorByName(string nameAuthor)
         {
-            throw new NotImplementedException();
+            ResponseModel<AuthorModel> response = new ResponseModel<AuthorModel>();
+
+            try
+            {
+                var authorByName = await _context.Authors.FirstOrDefaultAsync(AuthorDataBase => AuthorDataBase.NameAuthor == nameAuthor);
+
+                if (authorByName == null)
+                {
+                    response.Message = "Id not found.";
+                    return response;
+                }
+
+                response.Data = authorByName;
+                response.Status = true;
+                response.Message = "Author retrieved successfully.";
+
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+                response.Status = false;
+                response.Message = ex.Message;
+                return response;
+            }
         }
     }
 }
