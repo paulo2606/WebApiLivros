@@ -32,7 +32,7 @@ namespace WebApiLivros.Services
                 response.Message = "Author retrieved successfully.";
 
                 return response;
-                
+
             }
             catch (Exception ex)
             {
@@ -42,15 +42,15 @@ namespace WebApiLivros.Services
             }
         }
 
-        public async Task<ResponseModel<List<AuthorModel>>> ListAuthor()
+        public async Task<ResponseModel<List<BookModel>>> ListBooks()
         {
-            ResponseModel<List<AuthorModel>> response = new ResponseModel<List<AuthorModel>>();
+            ResponseModel<List<BookModel>> response = new ResponseModel<List<BookModel>>();
 
-            try 
+            try
             {
-                var author = await _context.Authors.ToListAsync();
-                response.Data = author;
-                response.Message = "Authors retrieved successfully.";
+                var books = await _context.Books.Include(a => a.Author).ToListAsync();
+                response.Data = books;
+                response.Message = "Books retrieved successfully.";
                 return response;
             }
             catch (Exception ex)
@@ -81,6 +81,53 @@ namespace WebApiLivros.Services
 
                 return response;
 
+            }
+            catch (Exception ex)
+            {
+                response.Status = false;
+                response.Message = ex.Message;
+                return response;
+            }
+        }
+
+        public async Task<ResponseModel<BookModel>> GetBookByName(string Title)
+        {
+            ResponseModel<BookModel> response = new ResponseModel<BookModel>();
+            try
+            {
+                var bookByName = await _context.Books.Include(a => a.Author).FirstOrDefaultAsync(BookDataBase => BookDataBase.Title == Title);
+                if (bookByName == null)
+                {
+                    response.Message = "Book not found.";
+                    return response;
+                }
+                response.Data = bookByName;
+                response.Status = true;
+                response.Message = "Book retrieved successfully.";
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Status = false;
+                response.Message = ex.Message;
+                return response;
+            }
+        }
+
+        public async Task<ResponseModel<List<AuthorModel>>> CreateAuthor(AuthorModel author)
+        {
+            ResponseModel<List<AuthorModel>> response = new ResponseModel<List<AuthorModel>>();
+
+            try
+            {
+                _context.Authors.Add(author);
+                await _context.SaveChangesAsync();
+
+                response.Data = await _context.Authors.ToListAsync();
+                response.Status = true;
+                response.Message = "Author created successfully.";
+
+                return response;
             }
             catch (Exception ex)
             {

@@ -15,10 +15,10 @@ namespace WebApiLivros.Controllers
             _authorInterface = authorInterface;
         }
 
-        [HttpGet("ListAuthor")]
-        public async Task<ActionResult<ResponseModel<List<AuthorModel>>>> ListAuthor()
+        [HttpGet("ListBooks")]
+        public async Task<ActionResult<ResponseModel<List<BookModel>>>> ListBooks()
         {
-            var response = await _authorInterface.ListAuthor();
+            var response = await _authorInterface.ListBooks();
             if (response.Status)
             {
                 return Ok(response);
@@ -26,7 +26,7 @@ namespace WebApiLivros.Controllers
             return BadRequest(response);
         }
 
-        [HttpGet("SearchAuthorById{idAuthor}")]
+        [HttpGet("GetAuthorById/{idAuthor}")]
         public async Task<ActionResult<ResponseModel<AuthorModel>>> GetAuthorById(int idAuthor)
         {
             var response = await _authorInterface.GetAuthorById(idAuthor);
@@ -37,7 +37,7 @@ namespace WebApiLivros.Controllers
             return NotFound(response);
         }
 
-        [HttpGet("SearchAuthorByName{nameAuthor}")]
+        [HttpGet("GetAuthorByName/{nameAuthor}")]
         public async Task<ActionResult<ResponseModel<AuthorModel>>> GetAuthorByName(string nameAuthor)
         {
             var response = await _authorInterface.GetAuthorByName(nameAuthor);
@@ -46,6 +46,32 @@ namespace WebApiLivros.Controllers
                 return Ok(response);
             }
             return NotFound(response);
+        }
+
+        [HttpGet("GetBookByName/{title}")]
+        public async Task<ActionResult<ResponseModel<BookModel>>> GetBookByName(string title)
+        {
+            var response = await _authorInterface.GetBookByName(title);
+            if (response.Status)
+            {
+                return Ok(response);
+            }
+            return NotFound(response);
+        }
+
+        [HttpPost("CreateAuthor")]
+        public async Task<ActionResult<ResponseModel<List<AuthorModel>>>> CreateAuthor([FromBody] AuthorModel author)
+        {
+            if (author == null)
+            {
+                return BadRequest("Author data is null.");
+            }
+            var response = await _authorInterface.CreateAuthor(author);
+            if (response.Status)
+            {
+                return CreatedAtAction(nameof(GetAuthorById), new { idAuthor = response.Data.FirstOrDefault()?.Id }, response);
+            }
+            return BadRequest(response);
         }
     }
 }
