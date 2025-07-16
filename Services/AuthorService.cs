@@ -114,18 +114,18 @@ namespace WebApiLivros.Services
             }
         }
 
-        public async Task<ResponseModel<List<AuthorModel>>> CreateAuthor(AuthorModel author)
+        public async Task<ResponseModel<List<BookModel>>> CreateBook(BookModel newBook)
         {
-            ResponseModel<List<AuthorModel>> response = new ResponseModel<List<AuthorModel>>();
+            ResponseModel<List<BookModel>> response = new ResponseModel<List<BookModel>>();
 
             try
             {
-                _context.Authors.Add(author);
+                _context.Books.Add(newBook);
                 await _context.SaveChangesAsync();
 
-                response.Data = await _context.Authors.ToListAsync();
+                response.Data = await _context.Books.Include(a => a.Author).ToListAsync(); 
                 response.Status = true;
-                response.Message = "Author created successfully.";
+                response.Message = "Book created successfully.";
 
                 return response;
             }

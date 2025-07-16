@@ -8,7 +8,7 @@ namespace WebApiLivros.Services
         Task<ResponseModel<AuthorModel>> GetAuthorById(int idAuthor);
         Task<ResponseModel<AuthorModel>> GetAuthorByName(string nameAuthor);
         Task<ResponseModel<BookModel>> GetBookByName(string Title);
-        Task<ResponseModel<List<AuthorModel>>> CreateAuthor(AuthorModel author);
+        Task<ResponseModel<List<BookModel>>> CreateBook(BookModel newBook);
 
 
     }

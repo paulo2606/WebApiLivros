@@ -60,13 +60,13 @@ namespace WebApiLivros.Controllers
         }
 
         [HttpPost("CreateAuthor")]
-        public async Task<ActionResult<ResponseModel<List<AuthorModel>>>> CreateAuthor([FromBody] AuthorModel author)
+        public async Task<ActionResult<ResponseModel<List<BookModel>>>> CreateAuthor([FromBody] BookModel newBook)
         {
-            if (author == null)
+            if (newBook == null)
             {
                 return BadRequest("Author data is null.");
             }
-            var response = await _authorInterface.CreateAuthor(author);
+            var response = await _authorInterface.CreateBook(newBook);
             if (response.Status)
             {
                 return CreatedAtAction(nameof(GetAuthorById), new { idAuthor = response.Data.FirstOrDefault()?.Id }, response);
