@@ -8,6 +8,6 @@ namespace WebApiLivros.Services
         Task<ResponseModel<BookModel>> GetBookByName(string Title);
         Task<ResponseModel<List<BookModel>>> CreateBook(BookModel newBook);
         Task<ResponseModel<List<BookModel>>> EditBook(BookModel bookEdited);
-        Task<ResponseModel<BookModel>> DeleteBook(int idBook);
+        Task<ResponseModel<BookModel>> DeleteBookById(int idBook);
     }
 }

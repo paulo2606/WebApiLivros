@@ -83,9 +83,32 @@ namespace WebApiLivros.Services
             throw new NotImplementedException();
         }
 
-        public Task<ResponseModel<BookModel>> DeleteBook(int idBook)
+        public async Task<ResponseModel<BookModel>> DeleteBookById(int idBook)
         {
-            throw new NotImplementedException();
+            ResponseModel<BookModel> response = new ResponseModel<BookModel>();
+            try
+            {
+                var Book = _context.Books.FirstOrDefault(BookDataBase => BookDataBase.Id == idBook);
+                if (Book == null)
+                {
+                    response.Message = "Book not found";
+                    response.Status = false;
+                }
+
+                _context.Books.Remove(Book);
+                await _context.SaveChangesAsync();
+
+                response.Data = Book;
+                response.Status = true;
+                response.Message = "Book deleted successfully.";
+                return response;
+            }
+            catch (Exception ex) 
+            {
+                response.Status = false;
+                response.Message = ex.Message;
+                return response;
+            }
         }
     }
 }

@@ -38,7 +38,7 @@ namespace WebApiLivros.Controllers
         }
 
         [HttpPost("CreateBook")]
-        public async Task<ActionResult<ResponseModel<List<BookModel>>>> CreateAuthor(BookModel newBook)
+        public async Task<ActionResult<ResponseModel<List<BookModel>>>> CreateBook(BookModel newBook)
         {
             if (newBook == null)
             {
@@ -47,9 +47,23 @@ namespace WebApiLivros.Controllers
             var response = await _bookInterface.CreateBook(newBook);
             if (response.Status)
             {
-                return CreatedAtAction(nameof(IAuthor.GetAuthorById), new { idAuthor = response.Data.FirstOrDefault()?.Id }, response);
+                return Ok(response);
             }
             return BadRequest(response);
         }
+
+        [HttpPut("DeleteBook/{idBook}")]
+        public async Task<ActionResult<ResponseModel<BookModel>>> DeleteBookById(int idBook)
+        {
+            var response = await _bookInterface.DeleteBook(idBook);
+            if (response.Status)
+            {
+                return Ok(response);
+            }
+            return NotFound("Book value is null.");
+        }
+
+
+
     }
 }

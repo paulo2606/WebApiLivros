@@ -15,8 +15,6 @@ namespace WebApiLivros.Controllers
             _authorInterface = authorInterface;
         }
 
-        
-
         [HttpGet("GetAuthorById/{idAuthor}")]
         public async Task<ActionResult<ResponseModel<AuthorModel>>> GetAuthorById(int idAuthor)
         {
@@ -38,9 +36,5 @@ namespace WebApiLivros.Controllers
             }
             return NotFound(response);
         }
-
-        
-
-        
     }
 }
