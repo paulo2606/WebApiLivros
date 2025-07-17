@@ -52,10 +52,10 @@ namespace WebApiLivros.Controllers
             return BadRequest(response);
         }
 
-        [HttpPut("DeleteBook/{idBook}")]
-        public async Task<ActionResult<ResponseModel<BookModel>>> DeleteBookById(int idBook)
+        [HttpPut("EditBook/{title}")]
+        public async Task<ActionResult<ResponseModel<BookModel>>> EditBook(int idBook, BookModel bookEdited)
         {
-            var response = await _bookInterface.DeleteBook(idBook);
+            var response = await _bookInterface.EditBook(idBook, bookEdited);
             if (response.Status)
             {
                 return Ok(response);
@@ -63,7 +63,16 @@ namespace WebApiLivros.Controllers
             return NotFound("Book value is null.");
         }
 
-
+        [HttpDelete("DeleteBook/{idBook}")]
+        public async Task<ActionResult<ResponseModel<BookModel>>> DeleteBookById(int idBook)
+        {
+            var response = await _bookInterface.DeleteBookById(idBook);
+            if (response.Status)
+            {
+                return Ok(response);
+            }
+            return NotFound("Book value is null.");
+        }
 
     }
 }

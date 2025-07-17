@@ -78,11 +78,6 @@ namespace WebApiLivros.Services
             }
         }
 
-        public Task<ResponseModel<List<BookModel>>> EditBook(BookModel bookEdited)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<ResponseModel<BookModel>> DeleteBookById(int idBook)
         {
             ResponseModel<BookModel> response = new ResponseModel<BookModel>();
@@ -104,6 +99,38 @@ namespace WebApiLivros.Services
                 return response;
             }
             catch (Exception ex) 
+            {
+                response.Status = false;
+                response.Message = ex.Message;
+                return response;
+            }
+        }
+
+        public async Task<ResponseModel<BookModel>> EditBook(int idBook, BookModel bookEdited)
+        {
+            ResponseModel<BookModel> response = new ResponseModel<BookModel>();
+            try
+            {
+                var book = await _context.Books.FirstOrDefaultAsync(BookDataBase => BookDataBase.Title.Equals(bookEdited));
+                if (book == null)
+                {
+                    response.Message = "Book not found";
+                    response.Status = false;
+                }
+
+                book.Title = bookEdited.Title;
+                book.Description = bookEdited.Description;
+                book.Year = bookEdited.Year;
+
+                //_context.Books.Update(bookEdited);
+                await _context.SaveChangesAsync();
+
+                response.Data = book;
+                response.Status = true;
+                response.Message = "Book edited successfully.";
+                return response;
+            }
+            catch (Exception ex)
             {
                 response.Status = false;
                 response.Message = ex.Message;
