@@ -15,16 +15,7 @@ namespace WebApiLivros.Controllers
             _authorInterface = authorInterface;
         }
 
-        [HttpGet("ListBooks")]
-        public async Task<ActionResult<ResponseModel<List<BookModel>>>> ListBooks()
-        {
-            var response = await _authorInterface.ListBooks();
-            if (response.Status)
-            {
-                return Ok(response);
-            }
-            return BadRequest(response);
-        }
+        
 
         [HttpGet("GetAuthorById/{idAuthor}")]
         public async Task<ActionResult<ResponseModel<AuthorModel>>> GetAuthorById(int idAuthor)
@@ -48,30 +39,8 @@ namespace WebApiLivros.Controllers
             return NotFound(response);
         }
 
-        [HttpGet("GetBookByName/{title}")]
-        public async Task<ActionResult<ResponseModel<BookModel>>> GetBookByName(string title)
-        {
-            var response = await _authorInterface.GetBookByName(title);
-            if (response.Status)
-            {
-                return Ok(response);
-            }
-            return NotFound(response);
-        }
+        
 
-        [HttpPost("CreateAuthor")]
-        public async Task<ActionResult<ResponseModel<List<BookModel>>>> CreateAuthor([FromBody] BookModel newBook)
-        {
-            if (newBook == null)
-            {
-                return BadRequest("Author data is null.");
-            }
-            var response = await _authorInterface.CreateBook(newBook);
-            if (response.Status)
-            {
-                return CreatedAtAction(nameof(GetAuthorById), new { idAuthor = response.Data.FirstOrDefault()?.Id }, response);
-            }
-            return BadRequest(response);
-        }
+        
     }
 }
